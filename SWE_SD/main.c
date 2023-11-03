@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-#include<Windows.h>
 
 #define DISABLE 0
 #define ENABLE 1
@@ -59,20 +58,20 @@ void InitController(Controller *Ctr){
 	Cleaner_Command=ON;
 }
 
-void Turn_Left(Controller *Ctr){
+void Turn_Left(){
 	printf("Activate Turn Left\n");
 }
-void Turn_Right(Controller *Ctr){
+void Turn_Right(){
 	printf("Activate Turn Right\n");
 }
 void Stop(Controller *Ctr){
 	if(!Ctr->Obstacle_Location[1]) {
 		Move_Backward=DISABLE;
-		Turn_Left(Ctr);
+		Turn_Left();
 	}
 	else if(!Ctr->Obstacle_Location[2]){
 		Move_Backward=DISABLE;
-		Turn_Right(Ctr);
+		Turn_Right();
 	}
 }
 
@@ -99,29 +98,27 @@ int main(void) {
 		free(ctr.Obstacle_Location);
 
 		//Find Dust
-		if(ctr.Dust_Existence) {
-			Cleaner_Command=UP;
+		if (ctr.Dust_Existence) {
+			Cleaner_Command = UP;
 			Clean();
 		}
 
 		//Detect Obstacle
-		if(ctr.Obstacle_Location[0]&&!ctr.Obstacle_Location[1]) {
-			Move_Forward=DISABLE;
-			Cleaner_Command=OFF;
-			Turn_Left(&ctr);
+		if (ctr.Obstacle_Location[0] && !ctr.Obstacle_Location[1]) {
+			Move_Forward = DISABLE;
+			Cleaner_Command = OFF;
+			Turn_Left();
 		}
-		else if(ctr.Obstacle_Location[0]&&ctr.Obstacle_Location[1]&&!ctr.Obstacle_Location[2]){
-			Move_Forward=DISABLE;
-			Cleaner_Command=OFF;
-			Turn_Right(&ctr);
+		else if (ctr.Obstacle_Location[0] && ctr.Obstacle_Location[1] && !ctr.Obstacle_Location[2]) {
+			Move_Forward = DISABLE;
+			Cleaner_Command = OFF;
+			Turn_Right();
 		}
-		else if(ctr.Obstacle_Location[0]&&ctr.Obstacle_Location[1]&&ctr.Obstacle_Location[2]) {
-			Move_Forward=DISABLE;
-			Cleaner_Command=OFF;
+		else if (ctr.Obstacle_Location[0] && ctr.Obstacle_Location[1] && ctr.Obstacle_Location[2]) {
+			Move_Forward = DISABLE;
+			Cleaner_Command = OFF;
 			Stop(&ctr);
 		}
-
-		Sleep(500);
-	}	
+	}
 	return 0;
 }
