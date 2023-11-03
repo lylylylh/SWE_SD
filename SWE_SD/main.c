@@ -4,7 +4,7 @@
 #include<Windows.h>
 
 typedef struct {
-	int Dust_Existence; // 1,0
+	int Dust_Existence; // true, false 1,0
 	int* Obstacle_Location; //front, left, right
 } Controller;
 
@@ -52,7 +52,7 @@ int main(void) {
 		printf("Left : %d\n", ctr.Obstacle_Location[1]);
 		printf("Right : %d\n\n", ctr.Obstacle_Location[2]);
 		free(ctr.Obstacle_Location);
-		Sleep(500);
+		Sleep(1000);
 	}
 	return 0;
 }
