@@ -59,20 +59,20 @@ void InitController(Controller *Ctr){
 	Cleaner_Command=ON;
 }
 
-void Turn_Left(Controller *Ctr){
+void Turn_Left(){
 	printf("Activate Turn Left\n");
 }
-void Turn_Right(Controller *Ctr){
+void Turn_Right(){
 	printf("Activate Turn Right\n");
 }
 void Stop(Controller *Ctr){
 	if(!Ctr->Obstacle_Location[1]) {
 		Move_Backward=DISABLE;
-		Turn_Left(Ctr);
+		Turn_Left();
 	}
 	else if(!Ctr->Obstacle_Location[2]){
 		Move_Backward=DISABLE;
-		Turn_Right(Ctr);
+		Turn_Right();
 	}
 }
 
@@ -109,19 +109,18 @@ int main(void) {
 		if(ctr.Obstacle_Location[0]&&!ctr.Obstacle_Location[1]) {
 			Move_Forward=DISABLE;
 			Cleaner_Command=OFF;
-			Turn_Left(&ctr);
+			Turn_Left();
 		}
 		else if(ctr.Obstacle_Location[0]&&ctr.Obstacle_Location[1]&&!ctr.Obstacle_Location[2]){
 			Move_Forward=DISABLE;
 			Cleaner_Command=OFF;
-			Turn_Right(&ctr);
+			Turn_Right();
 		}
 		else if(ctr.Obstacle_Location[0]&&ctr.Obstacle_Location[1]&&ctr.Obstacle_Location[2]) {
 			Move_Forward=DISABLE;
 			Cleaner_Command=OFF;
 			Stop(&ctr);
 		}
-
 	}	
 	return 0;
 }
