@@ -19,7 +19,7 @@ typedef struct {
 } Controller;
 
 int Front_Sensor_Interface(){
-	int fd = rand() % 2;
+	int fd = 1;
 	return fd;
 }
 
@@ -95,8 +95,6 @@ int main(void) {
 		printf("Left : %d\n", ctr.Obstacle_Location[1]);
 		printf("Right : %d\n\n", ctr.Obstacle_Location[2]);
 
-		free(ctr.Obstacle_Location);
-
 		//Find Dust
 		if (ctr.Dust_Existence) {
 			Cleaner_Command = UP;
@@ -119,6 +117,8 @@ int main(void) {
 			Cleaner_Command = OFF;
 			Stop(&ctr);
 		}
+
+		free(ctr.Obstacle_Location);
 	}
 	return 0;
 }
