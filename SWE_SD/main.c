@@ -1,10 +1,21 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-#include<Windows.h>
+// #include<Windows.h> //can't use in ios
+
+#define DISABLE 0
+#define ENABLE 1
+
+#define ON 2
+#define OFF 3
+#define UP 4
+
+
+int Move_Forward,Move_Backward;
+int Cleaner_Command;
 
 typedef struct {
-	int Dust_Existence; // true, false 1,0
+	int Dust_Existence; //1,0
 	int* Obstacle_Location; //front, left, right
 } Controller;
 
@@ -40,19 +51,77 @@ int Determine_Dust_Existence() {
 	return Dust_Sensor_Interface();
 }
 
+void InitController(Controller *Ctr){
+	Ctr->Dust_Existence = Determine_Dust_Existence();
+	Ctr->Obstacle_Location = Determine_Obstacle_Location();
+	Move_Forward=ENABLE;
+	Move_Backward=DISABLE;
+	Cleaner_Command=ON;
+}
+
+void Turn_Left(Controller *Ctr){
+	printf("Activate Turn Left\n");
+}
+void Turn_Right(Controller *Ctr){
+	printf("Activate Turn Right\n");
+}
+void Stop(Controller *Ctr){
+	if(!Ctr->Obstacle_Location[1]) {
+		Move_Backward=DISABLE;
+		Turn_Left(Ctr);
+	}
+	else if(!Ctr->Obstacle_Location[2]){
+		Move_Backward=DISABLE;
+		Turn_Right(Ctr);
+	}
+}
+
+void Clean(){
+	if(Cleaner_Command==ON) printf("Activate Clean\n\n");
+	else if(Cleaner_Command==UP) {
+		printf("Activate Power Clean\n");
+		Cleaner_Command=ON;
+	}
+}
 int main(void) {
 	Controller ctr;
+
 	while (1) {
 		srand(time(NULL));
-		ctr.Dust_Existence = Determine_Dust_Existence();
-		ctr.Obstacle_Location = Determine_Obstacle_Location();
+		InitController(&ctr);
+
 		// test code
 		printf("Dust : %d\n", ctr.Dust_Existence);
 		printf("Front : %d\n", ctr.Obstacle_Location[0]);
 		printf("Left : %d\n", ctr.Obstacle_Location[1]);
 		printf("Right : %d\n\n", ctr.Obstacle_Location[2]);
+
 		free(ctr.Obstacle_Location);
-		Sleep(1000);
-	}
+		//Sleep(500); //can't use in ios
+
+		//Find Dust
+		if(ctr.Dust_Existence) {
+			Cleaner_Command=UP;
+			Clean();
+		}
+
+		//Detect Obstacle
+		if(ctr.Obstacle_Location[0]&&!ctr.Obstacle_Location[1]) {
+			Move_Forward=DISABLE;
+			Cleaner_Command=OFF;
+			Turn_Left(&ctr);
+		}
+		else if(ctr.Obstacle_Location[0]&&ctr.Obstacle_Location[1]&&!ctr.Obstacle_Location[2]){
+			Move_Forward=DISABLE;
+			Cleaner_Command=OFF;
+			Turn_Right(&ctr);
+		}
+		else if(ctr.Obstacle_Location[0]&&ctr.Obstacle_Location[1]&&ctr.Obstacle_Location[2]) {
+			Move_Forward=DISABLE;
+			Cleaner_Command=OFF;
+			Stop(&ctr);
+		}
+
+	}	
 	return 0;
 }
