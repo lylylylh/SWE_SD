@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-// #include<Windows.h> //can't use in ios
+#include<Windows.h>
 
 #define DISABLE 0
 #define ENABLE 1
@@ -97,7 +97,6 @@ int main(void) {
 		printf("Right : %d\n\n", ctr.Obstacle_Location[2]);
 
 		free(ctr.Obstacle_Location);
-		//Sleep(500); //can't use in ios
 
 		//Find Dust
 		if(ctr.Dust_Existence) {
@@ -122,6 +121,7 @@ int main(void) {
 			Stop(&ctr);
 		}
 
+		Sleep(500);
 	}	
 	return 0;
 }
